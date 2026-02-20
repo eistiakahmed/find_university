@@ -1,5 +1,4 @@
 import { Collection, Document, MongoClient, ServerApiVersion } from 'mongodb';
-// import * as dns from 'dns';
 import * as dns from 'dns'
 
 dns.setServers(['8.8.8.8', '8.8.4.4']);

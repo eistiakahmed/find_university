@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-
 import { Filter } from 'mongodb';
 import { connect } from '../lib/dbConnect';
+
+// Enable edge runtime for faster response
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 interface University {
   _id: string;
@@ -44,10 +47,11 @@ const REGIONAL_GROUPS: Record<string, string[]> = {
 };
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  
-  // Build MongoDB filter query
-  const filter: Filter<University> = {};
+  try {
+    const { searchParams } = new URL(request.url);
+    
+    // Build MongoDB filter query
+    const filter: Filter<University> = {};
   
   // BASIC FILTERS
   
@@ -182,5 +186,16 @@ export async function GET(request: Request) {
       applied: Object.keys(filter).length > 0 || affordability || institutionAge || valueForMoney,
       count: results.length
     }
+  }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+    },
   });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch universities' },
+      { status: 500 }
+    );
+  }
 }
