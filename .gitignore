@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+API_TESTING_EXAMPLES.md
+FILTERING_GUIDE.md
+FILTERING_GUIDE.md
+IMPLEMENTATION_SUMMARY.md
